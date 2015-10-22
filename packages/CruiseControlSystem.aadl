@@ -10,17 +10,31 @@ public
 			on_button: device enable_cruise_control.impl;
 			off_button: device disable_cruise_control.impl;
 			brake: device disable_cruise_control.impl;
+			current_state: system current_power_state.impl;
 			speed_sensor: device current_speed_sensor.impl;
 			actuator: system actuator.impl;
 			controller: system AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl;
 		connections
-			on_button_to_controller: port on_button.enable -> controller.enable;
-			off_button_to_controller: port off_button.disable -> controller.disable;
-			brake_to_controller: port brake.disable -> controller.disable;
+			on_button_to_current_state: port on_button.enable -> current_state.enable;
+			off_button_to_current_state: port off_button.disable -> current_state.disable;
+			brake_to_current_state: port brake.disable -> current_state.disable;
+			current_state_to_controller: port current_state.enabled -> controller.enabled;
 			speed_sensor_to_controller: port speed_sensor.current_speed -> controller.current_speed;
 			controller_increase_to_actuator: port controller.increase_speed -> actuator.increase_speed;
 			controller_decrease_to_actuator: port controller.decrease_speed -> actuator.decrease_speed; 
 	end cruise_control_system.impl;
+	
+	----------------------------------------------------------------------------
+	
+	system current_power_state
+		features
+			enable: in event data port Base_Types::Boolean;
+			disable: in event data port Base_Types::Boolean;
+			enabled: out data port Base_Types::Boolean;
+	end current_power_state;
+	
+	system implementation current_power_state.impl
+	end current_power_state.impl;
 	
 	----------------------------------------------------------------------------
 	

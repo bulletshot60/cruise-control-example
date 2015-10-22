@@ -4,15 +4,25 @@ public
 	
 	abstract abstract_cruise_control_regulator
 		features
-			enable: in event data port Base_Types::Boolean;
-			disable: in event data port Base_Types::Boolean;
+			enabled: in data port Base_Types::Boolean;
 			current_speed: in data port Base_Types::Integer;
 			increase_speed: out event data port Base_Types::Boolean;
 			decrease_speed: out event data port Base_Types::Boolean;
+		annex agree {**
+			assume "speed is positive or 0": current_speed >= 0;
+			guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
+			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
+			guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
+		**};
 	end abstract_cruise_control_regulator;
 	
 	abstract implementation abstract_cruise_control_regulator.impl
-		
+		annex agree {**
+			eq speed_should_increase: bool = false; -- eq abstract speed_should_increase: bool;  
+			eq speed_should_decrease: bool = false; -- eq abstract speed_should_decrease: bool; 
+			assert increase_speed = (speed_should_increase and enabled);
+			assert decrease_speed = (speed_should_decrease and enabled);
+		**};
 	end abstract_cruise_control_regulator.impl;
 	
 end AbstractCruiseControlRegulator;

@@ -3,6 +3,12 @@ public
 	with Base_Types, AbstractCruiseControlRegulator;
 	
 	abstract abstract_adaptive_cruise_control_regulator extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator
+		annex agree {**
+			assume "speed is positive or 0": current_speed >= 0;
+			guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
+			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
+			guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
+		**};
 	end abstract_adaptive_cruise_control_regulator;
 	
 	abstract implementation abstract_adaptive_cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
@@ -11,20 +17,28 @@ public
 		connections
 			decision_system_increase_out: port decision_system.increase_speed -> increase_speed;
 			decision_system_decrease_out: port decision_system.decrease_speed -> decrease_speed;
-			enable_to_decision_system: port enable -> decision_system.enable;
-			disable_to_decision_system: port disable -> decision_system.disable;
+			enabled_to_decision_system: port enabled -> decision_system.enabled;
+		annex agree {**
+			eq speed_should_increase: bool = false; -- eq abstract speed_should_increase: bool;  
+			eq speed_should_decrease: bool = false; -- eq abstract speed_should_decrease: bool;
+			assert increase_speed = (speed_should_increase and enabled);
+			assert decrease_speed = (speed_should_decrease and enabled);
+		**};
 	end abstract_adaptive_cruise_control_regulator.impl;
 	
 	----------------------------------------------------------------------------
 	
 	system decision_system
 		features
-			enable: in event data port Base_Types::Boolean;
-			disable: in event data port Base_Types::Boolean;
+			enabled: in data port Base_Types::Boolean;
 			increase_speed_in: in event data port Base_Types::Boolean;
 			decrease_speed_in: in event data port Base_Types::Boolean;
 			increase_speed: out event data port Base_Types::Boolean;
 			decrease_speed: out event data port Base_Types::Boolean;
+		annex agree {**
+			guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
+			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
+		**};
 	end decision_system;
 	
 	system implementation decision_system.impl
