@@ -13,35 +13,37 @@ public
 	
 	abstract implementation abstract_adaptive_cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
 		subcomponents
-			decision_system: system decision_system.impl;
-		connections
-			decision_system_increase_out: port decision_system.increase_speed -> increase_speed;
-			decision_system_decrease_out: port decision_system.decrease_speed -> decrease_speed;
-			enabled_to_decision_system: port enabled -> decision_system.enabled;
-		annex agree {**
-			eq speed_should_increase: bool = false; -- eq abstract speed_should_increase: bool;  
-			eq speed_should_decrease: bool = false; -- eq abstract speed_should_decrease: bool;
-			assert increase_speed = (speed_should_increase and enabled);
-			assert decrease_speed = (speed_should_decrease and enabled);
-		**};
+			increase_speed_button: refined to system increase_speed_button.impl;
+			decrease_speed_button: refined to system decrease_speed_button.impl;
+			
 	end abstract_adaptive_cruise_control_regulator.impl;
 	
 	----------------------------------------------------------------------------
 	
-	system decision_system
-		features
-			enabled: in data port Base_Types::Boolean;
-			increase_speed_in: in event data port Base_Types::Boolean;
-			decrease_speed_in: in event data port Base_Types::Boolean;
-			increase_speed: out event data port Base_Types::Boolean;
-			decrease_speed: out event data port Base_Types::Boolean;
+	system increase_speed_button extends AbstractCruiseControlRegulator::increase_speed_button
 		annex agree {**
-			guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
-			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
+			guarantee "increase_speed only true when pressed": pressed = increase_speed; 
 		**};
-	end decision_system;
+	end increase_speed_button;
 	
-	system implementation decision_system.impl
-	end decision_system.impl;
+	system implementation increase_speed_button.impl extends AbstractCruiseControlRegulator::increase_speed_button.impl
+		annex agree {**
+			assert increase_speed = if pressed then true else false;
+		**};
+	end increase_speed_button.impl;
+	
+	----------------------------------------------------------------------------
+	
+	system decrease_speed_button extends AbstractCruiseControlRegulator::decrease_speed_button
+		annex agree {**
+			guarantee "decrease_speed only true when pressed": pressed = decrease_speed; 
+		**};
+	end decrease_speed_button;
+	
+	system implementation decrease_speed_button.impl extends AbstractCruiseControlRegulator::decrease_speed_button.impl
+		annex agree {**
+			assert decrease_speed = if pressed then true else false;
+		**};
+	end decrease_speed_button.impl;
 	
 end AbstractAdaptiveCruiseControlRegulator;

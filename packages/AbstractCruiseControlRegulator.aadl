@@ -17,12 +17,52 @@ public
 	end abstract_cruise_control_regulator;
 	
 	abstract implementation abstract_cruise_control_regulator.impl
+		subcomponents
+			increase_speed_button: system increase_speed_button.impl;
+			decrease_speed_button: system decrease_speed_button.impl;
+		connections
+			increase_speed_button_out: port increase_speed_button.increase_speed -> increase_speed;
+			decrease_speed_button_out: port decrease_speed_button.decrease_speed -> decrease_speed;
 		annex agree {**
-			eq speed_should_increase: bool = false; -- eq abstract speed_should_increase: bool;  
-			eq speed_should_decrease: bool = false; -- eq abstract speed_should_decrease: bool; 
+			eq abstract speed_should_increase: bool;  
+			eq abstract speed_should_decrease: bool; 
 			assert increase_speed = (speed_should_increase and enabled);
 			assert decrease_speed = (speed_should_decrease and enabled);
 		**};
 	end abstract_cruise_control_regulator.impl;
+	
+	----------------------------------------------------------------------------
+	
+	abstract increase_speed_button
+		features
+			pressed: out event data port Base_Types::Boolean;
+			increase_speed: out data port Base_Types::Boolean;
+		annex agree {**
+			guarantee "increase_speed only true when pressed": pressed = increase_speed; 
+		**};
+	end increase_speed_button;
+	
+	abstract implementation increase_speed_button.impl
+		annex agree {**
+			assert increase_speed = if pressed then true else false;
+		**};
+	end increase_speed_button.impl;
+	
+	----------------------------------------------------------------------------
+	
+	abstract decrease_speed_button
+		features
+			pressed: out event data port Base_Types::Boolean;
+			decrease_speed: out data port Base_Types::Boolean;
+		annex agree {**
+			guarantee "decrease_speed only true when pressed": pressed = decrease_speed; 
+		**};
+	end decrease_speed_button;
+	
+	abstract implementation decrease_speed_button.impl
+		annex agree {**
+			assert decrease_speed = if pressed then true else false;
+		**};
+	end decrease_speed_button.impl;
 	
 end AbstractCruiseControlRegulator;
