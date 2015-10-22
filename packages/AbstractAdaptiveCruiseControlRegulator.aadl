@@ -1,0 +1,33 @@
+package AbstractAdaptiveCruiseControlRegulator
+public
+	with Base_Types, AbstractCruiseControlRegulator;
+	
+	system abstract_adaptive_cruise_control_regulator extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator
+	end abstract_adaptive_cruise_control_regulator;
+	
+	system implementation abstract_adaptive_cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
+		subcomponents
+			decision_system: system decision_system.impl;
+		connections
+			decision_system_increase_out: port decision_system.increase_speed -> increase_speed;
+			decision_system_decrease_out: port decision_system.decrease_speed -> decrease_speed;
+			enable_to_decision_system: port enable -> decision_system.enable;
+			disable_to_decision_system: port disable -> decision_system.disable;
+	end abstract_adaptive_cruise_control_regulator.impl;
+	
+	----------------------------------------------------------------------------
+	
+	system decision_system
+		features
+			enable: in event data port Base_Types::Boolean;
+			disable: in event data port Base_Types::Boolean;
+			increase_speed_in: in event data port Base_Types::Boolean;
+			decrease_speed_in: in event data port Base_Types::Boolean;
+			increase_speed: out event data port Base_Types::Boolean;
+			decrease_speed: out event data port Base_Types::Boolean;
+	end decision_system;
+	
+	system implementation decision_system.impl
+	end decision_system.impl;
+	
+end AbstractAdaptiveCruiseControlRegulator;

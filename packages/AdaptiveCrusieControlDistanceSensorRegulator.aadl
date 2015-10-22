@@ -1,0 +1,40 @@
+package AdaptiveCruiseControlDistanceSensorRegulator
+public
+	with Base_Types, AbstractAdaptiveCruiseControlRegulator;
+	
+	system adaptive_cruise_control_distance_sensor extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator
+	end adaptive_cruise_control_distance_sensor;
+	
+	system implementation adaptive_cruise_control_distance_sensor.impl extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator.impl
+		subcomponents
+			distance_sensor: device distance_sensor.impl;
+			decision_engine: system decision_engine.impl;
+		connections
+			distance_sensor_to_decision_engine: port distance_sensor.distance -> decision_engine.distance;
+			decision_engine_to_decision_system_increase: port decision_engine.increase_speed -> decision_system.increase_speed_in;
+			decision_engine_to_decision_system_decrease: port decision_engine.decrease_speed -> decision_system.decrease_speed_in;
+	end adaptive_cruise_control_distance_sensor.impl;
+	
+	----------------------------------------------------------------------------
+	
+	system decision_engine
+		features
+			distance: in data port Base_Types::Integer;
+			increase_speed: out event data port Base_Types::Boolean;
+			decrease_speed: out event data port Base_Types::Boolean;
+	end decision_engine;
+	
+	system implementation decision_engine.impl
+	end decision_engine.impl;
+	
+	----------------------------------------------------------------------------
+	
+	device distance_sensor
+		features
+			distance: out data port Base_Types::Integer;
+	end distance_sensor;
+	
+	device implementation distance_sensor.impl
+	end distance_sensor.impl;
+	
+end AdaptiveCruiseControlDistanceSensorRegulator;
