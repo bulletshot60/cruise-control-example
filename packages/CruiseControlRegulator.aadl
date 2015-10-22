@@ -1,17 +1,11 @@
 package CruiseControlRegulator
 public
-	with Base_Types;
+	with Base_Types, AbstractCruiseControlRegulator;
 	
-	system cruise_control_regulator
-		features
-			enable: in event data port Base_Types::Boolean;
-			disable: in event data port Base_Types::Boolean;
-			current_speed: in data port Base_Types::Integer;
-			increase_speed: out event data port Base_Types::Boolean;
-			decrease_speed: out event data port Base_Types::Boolean;
+	system cruise_control_regulator extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator
 	end cruise_control_regulator;
 	
-	system implementation cruise_control_regulator.impl
+	system implementation cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
 		subcomponents
 			increase_speed_button: device increase_speed_button.impl;
 			decrease_speed_button: device decrease_speed_button.impl;
