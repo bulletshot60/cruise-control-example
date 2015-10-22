@@ -1,0 +1,18 @@
+package AbstractCruiseControlRegulator
+public
+	with Base_Types;
+	
+	system abstract_cruise_control_regulator
+		features
+			enable: in event data port Base_Types::Boolean;
+			disable: in event data port Base_Types::Boolean;
+			current_speed: in data port Base_Types::Integer;
+			increase_speed: out event data port Base_Types::Boolean;
+			decrease_speed: out event data port Base_Types::Boolean;
+	end abstract_cruise_control_regulator;
+	
+	system implementation abstract_cruise_control_regulator.impl
+		
+	end abstract_cruise_control_regulator.impl;
+	
+end AbstractCruiseControlRegulator;

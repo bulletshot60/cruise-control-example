@@ -1,0 +1,66 @@
+package CruiseControlSystem
+public
+	with AbstractCruiseControlRegulator, Base_Types;
+	
+	system cruise_control_system
+	end cruise_control_system;
+	
+	system implementation cruise_control_system.impl
+		subcomponents
+			on_button: device enable_cruise_control.impl;
+			off_button: device disable_cruise_control.impl;
+			brake: device disable_cruise_control.impl;
+			speed_sensor: device current_speed_sensor.impl;
+			actuator: system actuator.impl;
+			controller: system AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl;
+		connections
+			on_button_to_controller: port on_button.enable -> controller.enable;
+			off_button_to_controller: port off_button.disable -> controller.disable;
+			brake_to_controller: port brake.disable -> controller.disable;
+			speed_sensor_to_controller: port speed_sensor.current_speed -> controller.current_speed;
+			controller_increase_to_actuator: port controller.increase_speed -> actuator.increase_speed;
+			controller_decrease_to_actuator: port controller.decrease_speed -> actuator.decrease_speed; 
+	end cruise_control_system.impl;
+	
+	----------------------------------------------------------------------------
+	
+	system actuator
+		features
+			increase_speed: in event data port Base_Types::Boolean;
+			decrease_speed: in event data port Base_Types::Boolean;
+	end actuator;
+	
+	system implementation actuator.impl
+	end actuator.impl;
+	
+	----------------------------------------------------------------------------
+	
+	device current_speed_sensor
+		features
+			current_speed: out data port Base_Types::Integer;
+	end current_speed_sensor;
+	
+	device implementation current_speed_sensor.impl
+	end current_speed_sensor.impl;
+	
+	----------------------------------------------------------------------------
+	
+	device enable_cruise_control
+		features
+			enable: out event data port Base_Types::Boolean;
+	end enable_cruise_control;
+	
+	device implementation enable_cruise_control.impl
+	end enable_cruise_control.impl;
+	
+	----------------------------------------------------------------------------
+	
+	device disable_cruise_control
+		features
+			disable: out event data port Base_Types::Boolean;
+	end disable_cruise_control;
+	
+	device implementation disable_cruise_control.impl
+	end disable_cruise_control.impl;
+	
+end CruiseControlSystem;
