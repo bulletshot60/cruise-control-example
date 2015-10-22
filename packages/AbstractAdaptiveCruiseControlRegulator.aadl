@@ -2,10 +2,10 @@ package AbstractAdaptiveCruiseControlRegulator
 public
 	with Base_Types, AbstractCruiseControlRegulator;
 	
-	system abstract_adaptive_cruise_control_regulator extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator
+	abstract abstract_adaptive_cruise_control_regulator extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator
 	end abstract_adaptive_cruise_control_regulator;
 	
-	system implementation abstract_adaptive_cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
+	abstract implementation abstract_adaptive_cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
 		subcomponents
 			decision_system: system decision_system.impl;
 		connections
