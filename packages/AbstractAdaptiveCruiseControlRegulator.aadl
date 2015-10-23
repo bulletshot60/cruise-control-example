@@ -84,14 +84,14 @@ public
 	
 	--we need to realize this implementation in order to make it useable
 	--our extenders will also receive this implementation as a result
-	system increase_speed_button extends AbstractCruiseControlRegulator::increase_speed_button
+	system increase_speed_button extends AbstractCruiseControlRegulator::change_speed_button
 		--inherited from parent
 		--annex agree {**
-		--	guarantee "increase_speed only true when pressed": pressed = increase_speed; 
+		--	guarantee "speed_change only true when pressed": pressed = change_speed; 
 		--**};
 	end increase_speed_button;
 	
-	system implementation increase_speed_button.impl extends AbstractCruiseControlRegulator::increase_speed_button.impl
+	system implementation increase_speed_button.impl extends AbstractCruiseControlRegulator::change_speed_button.impl
 		--inherited from parent
 		--annex agree {**
 		--	assert increase_speed = if pressed then true else false;
@@ -102,17 +102,17 @@ public
 	
 	--we need to realize this implementation in order to make it useable
 	--our extenders will also receive this implementation as a result
-	system decrease_speed_button extends AbstractCruiseControlRegulator::decrease_speed_button
+	system decrease_speed_button extends AbstractCruiseControlRegulator::change_speed_button
 		--inherited from parent
 		--annex agree {**
-		--	guarantee "decrease_speed only true when pressed": pressed = decrease_speed; 
+		--	assert change_speed = if pressed then true else false;
 		--**};
 	end decrease_speed_button;
 	
-	system implementation decrease_speed_button.impl extends AbstractCruiseControlRegulator::decrease_speed_button.impl
+	system implementation decrease_speed_button.impl extends AbstractCruiseControlRegulator::change_speed_button.impl
 		--inherited from parent
 		--annex agree {**
-		--	assert decrease_speed = if pressed then true else false;
+		--	assert change_speed = if pressed then true else false;
 		--**};
 	end decrease_speed_button.impl;
 	

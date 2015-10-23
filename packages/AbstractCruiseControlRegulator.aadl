@@ -18,8 +18,8 @@ public
 	
 	abstract implementation abstract_cruise_control_regulator.impl
 		subcomponents
-			increase_speed_button: system increase_speed_button.impl;
-			decrease_speed_button: system decrease_speed_button.impl;
+			increase_speed_button: abstract change_speed_button.impl;
+			decrease_speed_button: abstract change_speed_button.impl;
 		annex agree {**
 			eq abstract speed_should_increase: bool;  
 			eq abstract speed_should_decrease: bool; 
@@ -30,36 +30,19 @@ public
 	
 	----------------------------------------------------------------------------
 	
-	abstract increase_speed_button
+	abstract change_speed_button
 		features
 			pressed: out event data port Base_Types::Boolean;
-			increase_speed: out data port Base_Types::Boolean;
+			change_speed: out data port Base_Types::Boolean;
 		annex agree {**
-			guarantee "increase_speed only true when pressed": pressed = increase_speed; 
+			guarantee "speed_change only true when pressed": pressed = change_speed; 
 		**};
-	end increase_speed_button;
+	end change_speed_button;
 	
-	abstract implementation increase_speed_button.impl
+	abstract implementation change_speed_button.impl
 		annex agree {**
-			assert increase_speed = if pressed then true else false;
+			assert change_speed = if pressed then true else false;
 		**};
-	end increase_speed_button.impl;
-	
-	----------------------------------------------------------------------------
-	
-	abstract decrease_speed_button
-		features
-			pressed: out event data port Base_Types::Boolean;
-			decrease_speed: out data port Base_Types::Boolean;
-		annex agree {**
-			guarantee "decrease_speed only true when pressed": pressed = decrease_speed; 
-		**};
-	end decrease_speed_button;
-	
-	abstract implementation decrease_speed_button.impl
-		annex agree {**
-			assert decrease_speed = if pressed then true else false;
-		**};
-	end decrease_speed_button.impl;
+	end change_speed_button.impl;
 	
 end AbstractCruiseControlRegulator;
