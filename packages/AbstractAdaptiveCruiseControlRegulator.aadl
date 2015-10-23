@@ -17,7 +17,9 @@ public
 	
 	abstract implementation abstract_adaptive_cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
 		subcomponents
+			--use non-abstract implementation
 			increase_speed_button: refined to system increase_speed_button.impl;
+			--use non-abstract implementation
 			decrease_speed_button: refined to system decrease_speed_button.impl;
 			decision_engine: abstract decision_engine.impl;
 		connections
@@ -80,6 +82,8 @@ public
 	
 	----------------------------------------------------------------------------
 	
+	--we need to realize this implementation in order to make it useable
+	--our extenders will also receive this implementation as a result
 	system increase_speed_button extends AbstractCruiseControlRegulator::increase_speed_button
 		--inherited from parent
 		--annex agree {**
@@ -96,6 +100,8 @@ public
 	
 	----------------------------------------------------------------------------
 	
+	--we need to realize this implementation in order to make it useable
+	--our extenders will also receive this implementation as a result
 	system decrease_speed_button extends AbstractCruiseControlRegulator::decrease_speed_button
 		--inherited from parent
 		--annex agree {**

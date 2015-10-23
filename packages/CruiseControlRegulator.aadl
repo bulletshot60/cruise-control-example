@@ -14,7 +14,9 @@ public
 	
 	system implementation cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
 		subcomponents
+			--use non-abstract implementation
 			increase_speed_button: refined to system increase_speed_button.impl;
+			--use non-abstract implementation
 			decrease_speed_button: refined to system decrease_speed_button.impl;
 		connections
 			increase_speed_button_out: port increase_speed_button.increase_speed -> increase_speed;
@@ -32,6 +34,7 @@ public
 	
 	----------------------------------------------------------------------------
 	
+	--we need to realize this implementation in order to make it useable
 	system increase_speed_button extends AbstractCruiseControlRegulator::increase_speed_button
 		--inherited from parent
 		--annex agree {**
@@ -48,6 +51,7 @@ public
 	
 	----------------------------------------------------------------------------
 	
+	--we need to realize this implementation in order to make it useable
 	system decrease_speed_button extends AbstractCruiseControlRegulator::decrease_speed_button
 		--inherited from parent
 		--annex agree {**

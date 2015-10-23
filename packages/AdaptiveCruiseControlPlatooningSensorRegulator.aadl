@@ -14,11 +14,13 @@ public
 	
 	system implementation adaptive_cruise_control_platooning_sensor.impl extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator.impl
 		subcomponents
+			--use non-abstract implementation
 			decision_engine: refined to system decision_engine.impl;
 	end adaptive_cruise_control_platooning_sensor.impl;
 	
 	----------------------------------------------------------------------------
 	
+	--we need to realize this implementation in order to make it useable
 	system decision_engine extends AbstractAdaptiveCruiseControlRegulator::decision_engine
 		-- data_source_1 is front distance sensor
 		-- data_source_2 is rear distance sensor
