@@ -3,12 +3,13 @@ public
 	with AbstractAdaptiveCruiseControlRegulator;
 	
 	system adaptive_cruise_control_platooning_sensor extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator
-		annex agree {**
-			assume "speed is positive or 0": current_speed >= 0;
-			guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
-			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
-			guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
-		**};
+		--inherited from parent
+		--annex agree {**
+		--	assume "speed is positive or 0": current_speed >= 0;
+		--	guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
+		--	guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
+		--	guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
+		--**};
 	end adaptive_cruise_control_platooning_sensor;
 	
 	system implementation adaptive_cruise_control_platooning_sensor.impl extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator.impl
@@ -21,40 +22,44 @@ public
 	system decision_engine extends AbstractAdaptiveCruiseControlRegulator::decision_engine
 		-- data_source_1 is front distance sensor
 		-- data_source_2 is rear distance sensor
-		annex agree {**
-			assume "speed is positive or 0": current_speed >= 0;
-			guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
-			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
-			guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
-		**};
+		--inherited from parent
+		--annex agree {**
+		--	assume "speed is positive or 0": current_speed >= 0;
+		--	guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
+		--	guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
+		--	guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
+		--**};
 	end decision_engine;
 	
 	system implementation decision_engine.impl extends AbstractAdaptiveCruiseControlRegulator::decision_engine.impl
 		annex agree {**
+			--override variable in parent
 			eq front_data_source_outside_threshold: bool = data_source_1 < 5;
+			--override variable in parent
 			eq rear_data_source_outside_threshold: bool = front_data_source_outside_threshold = false and data_source_2 < 5;
-			eq speed_should_increase: bool = if rear_data_source_outside_threshold then
-				true
-			else
-				if front_data_source_outside_threshold then
-					false
-				else
-					if increase_speed_requested and decrease_speed_requested then
-						true
-					else
-						increase_speed_requested;
-			eq speed_should_decrease: bool = if front_data_source_outside_threshold then
-				true
-			else
-				if rear_data_source_outside_threshold then
-					false
-				else
-					if increase_speed_requested and decrease_speed_requested then
-						false
-					else
-						decrease_speed_requested;
-			assert increase_speed = (speed_should_increase and enabled);
-			assert decrease_speed = (speed_should_decrease and enabled);
+			--inherited from parent
+			--eq speed_should_increase: bool = if rear_data_source_outside_threshold then
+			--	true
+			--else
+			--	if front_data_source_outside_threshold then
+			--		false
+			--	else
+			--		if increase_speed_requested and decrease_speed_requested then
+			--			true
+			--		else
+			--			increase_speed_requested;
+			--eq speed_should_decrease: bool = if front_data_source_outside_threshold then
+			--	true
+			--else
+			--	if rear_data_source_outside_threshold then
+			--		false
+			--	else
+			--		if increase_speed_requested and decrease_speed_requested then
+			--			false
+			--		else
+			--			decrease_speed_requested;
+			--assert increase_speed = (speed_should_increase and enabled);
+			--assert decrease_speed = (speed_should_decrease and enabled);
 		**};
 	end decision_engine.impl;
 	
