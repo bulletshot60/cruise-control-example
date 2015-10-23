@@ -24,9 +24,9 @@ public
 			decision_engine: abstract decision_engine.impl;
 		connections
 			increase_speed_button_to_decision_engine_pressed: port increase_speed_button.pressed -> decision_engine.increase_speed_button_pressed;
-			increase_speed_button_to_decision_engine_requested: port increase_speed_button.increase_speed -> decision_engine.increase_speed_requested;
+			increase_speed_button_to_decision_engine_requested: port increase_speed_button.change_speed -> decision_engine.increase_speed_requested;
 			decrease_speed_button_to_decision_engine_pressed: port decrease_speed_button.pressed -> decision_engine.decrease_speed_button_pressed;
-			decrease_speed_button_to_decision_engine_requested: port decrease_speed_button.decrease_speed -> decision_engine.decrease_speed_requested;
+			decrease_speed_button_to_decision_engine_requested: port decrease_speed_button.change_speed -> decision_engine.decrease_speed_requested;
 			data_source_1_in: port data_source_1 -> decision_engine.data_source_1;
 			data_source_2_in: port data_source_1 -> decision_engine.data_source_1;
 			current_speed_in: port current_speed -> decision_engine.current_speed;
