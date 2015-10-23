@@ -16,6 +16,9 @@ public
 		subcomponents
 			increase_speed_button: refined to system increase_speed_button.impl;
 			decrease_speed_button: refined to system decrease_speed_button.impl;
+		connections
+			increase_speed_button_out: port increase_speed_button.increase_speed -> increase_speed;
+			decrease_speed_button_out: port decrease_speed_button.decrease_speed -> decrease_speed;
 		annex agree {**
 			--override abstract in parent
 			eq speed_should_increase: bool = if increase_speed_button.increase_speed and decrease_speed_button.decrease_speed then true else increase_speed_button.increase_speed;   

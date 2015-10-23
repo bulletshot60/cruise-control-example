@@ -1,42 +1,61 @@
 package AdaptiveCruiseControlPlatooningSensorRegulator
 public
-	with Base_Types, AbstractAdaptiveCruiseControlRegulator;
+	with AbstractAdaptiveCruiseControlRegulator;
 	
 	system adaptive_cruise_control_platooning_sensor extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator
+		annex agree {**
+			assume "speed is positive or 0": current_speed >= 0;
+			guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
+			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
+			guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
+		**};
 	end adaptive_cruise_control_platooning_sensor;
 	
 	system implementation adaptive_cruise_control_platooning_sensor.impl extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator.impl
 		subcomponents
-			platooning_sensor: device platooning_sensor.impl;
-			decision_engine: system decision_engine.impl;
-		connections
-			platooning_sensor_to_decision_engine: port platooning_sensor.avg_speed -> decision_engine.avg_speed;
-			current_speed_to_decision_engine: port current_speed -> decision_engine.current_speed;
-			decision_engine_to_decision_system_increase: port decision_engine.increase_speed -> decision_system.increase_speed_in;
-			decision_engine_to_decision_system_decrease: port decision_engine.decrease_speed -> decision_system.decrease_speed_in;
+			decision_engine: refined to system decision_engine.impl;
 	end adaptive_cruise_control_platooning_sensor.impl;
 	
 	----------------------------------------------------------------------------
 	
-	system decision_engine
-		features
-			avg_speed: in data port Base_Types::Integer;
-			current_speed: in data port Base_Types::Integer;
-			increase_speed: out event data port Base_Types::Boolean;
-			decrease_speed: out event data port Base_Types::Boolean;
+	system decision_engine extends AbstractAdaptiveCruiseControlRegulator::decision_engine
+		-- data_source_1 is front distance sensor
+		-- data_source_2 is rear distance sensor
+		annex agree {**
+			assume "speed is positive or 0": current_speed >= 0;
+			guarantee "speed will only increase if enabled": increase_speed = false or (enabled = true and increase_speed = true);
+			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
+			guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
+		**};
 	end decision_engine;
 	
-	system implementation decision_engine.impl
+	system implementation decision_engine.impl extends AbstractAdaptiveCruiseControlRegulator::decision_engine.impl
+		annex agree {**
+			eq front_data_source_outside_threshold: bool = data_source_1 < 5;
+			eq rear_data_source_outside_threshold: bool = front_data_source_outside_threshold = false and data_source_2 < 5;
+			eq speed_should_increase: bool = if rear_data_source_outside_threshold then
+				true
+			else
+				if front_data_source_outside_threshold then
+					false
+				else
+					if increase_speed_requested and decrease_speed_requested then
+						true
+					else
+						increase_speed_requested;
+			eq speed_should_decrease: bool = if front_data_source_outside_threshold then
+				true
+			else
+				if rear_data_source_outside_threshold then
+					false
+				else
+					if increase_speed_requested and decrease_speed_requested then
+						false
+					else
+						decrease_speed_requested;
+			assert increase_speed = (speed_should_increase and enabled);
+			assert decrease_speed = (speed_should_decrease and enabled);
+		**};
 	end decision_engine.impl;
-	
-	----------------------------------------------------------------------------
-	
-	device platooning_sensor
-		features
-			avg_speed: out data port Base_Types::Integer;
-	end platooning_sensor;
-	
-	device implementation platooning_sensor.impl
-	end platooning_sensor.impl;
 	
 end AdaptiveCruiseControlPlatooningSensorRegulator;
