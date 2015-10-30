@@ -36,9 +36,9 @@ public
 	system implementation decision_engine.impl extends AbstractAdaptiveCruiseControlRegulator::decision_engine.impl
 		annex agree {**
 			--override variable in parent
-			eq front_data_source_outside_threshold: bool = data_source_1 < 5;
+			eq front_data_source_outside_threshold: bool = rear_data_source_outside_threshold = false and data_source_1 < 5;
 			--override variable in parent
-			eq rear_data_source_outside_threshold: bool = front_data_source_outside_threshold = false and data_source_2 < 5;
+			eq rear_data_source_outside_threshold: bool = data_source_2 < 5;
 			--inherited from parent
 			--eq speed_should_increase: bool = if rear_data_source_outside_threshold then
 			--	true
@@ -47,7 +47,7 @@ public
 			--		false
 			--	else
 			--		if increase_speed_requested and decrease_speed_requested then
-			--			true
+			--			false
 			--		else
 			--			increase_speed_requested;
 			--eq speed_should_decrease: bool = if front_data_source_outside_threshold then

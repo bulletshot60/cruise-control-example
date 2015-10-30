@@ -22,10 +22,8 @@ public
 			increase_speed_button_out: port increase_speed_button.change_speed -> increase_speed;
 			decrease_speed_button_out: port decrease_speed_button.change_speed -> decrease_speed;
 		annex agree {**
-			--override abstract in parent
-			eq speed_should_increase: bool = if increase_speed_button.increase_speed and decrease_speed_button.decrease_speed then true else increase_speed_button.increase_speed;   
-			--override abstract in parent
-			eq speed_should_decrease: bool = if increase_speed_button.increase_speed and decrease_speed_button.decrease_speed then false else decrease_speed_button.decrease_speed;
+			eq speed_should_increase: bool = if increase_speed_button.change_speed and decrease_speed_button.change_speed then false else increase_speed_button.change_speed;   
+			eq speed_should_decrease: bool = if increase_speed_button.change_speed and decrease_speed_button.change_speed then false else decrease_speed_button.change_speed;
 			--inherited from parent
 			--assert increase_speed = (speed_should_increase and enabled);
 			--assert decrease_speed = (speed_should_decrease and enabled);

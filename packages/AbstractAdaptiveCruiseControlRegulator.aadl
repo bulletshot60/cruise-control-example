@@ -61,13 +61,15 @@ public
 		annex agree {**
 			eq abstract front_data_source_outside_threshold: bool;
 			eq abstract rear_data_source_outside_threshold: bool;
+			--override parent
 			eq speed_should_increase: bool = if rear_data_source_outside_threshold then
 				true
 			else
 				if increase_speed_requested and decrease_speed_requested then
-					true
+					false
 				else
 					increase_speed_requested;
+			--override parent
 			eq speed_should_decrease: bool = if front_data_source_outside_threshold then
 				true
 			else
@@ -75,8 +77,9 @@ public
 					false
 				else
 					decrease_speed_requested;
-			assert increase_speed = (speed_should_increase and enabled);
-			assert decrease_speed = (speed_should_decrease and enabled);
+			--inherited from parent
+			--assert increase_speed = (speed_should_increase and enabled);
+			--assert decrease_speed = (speed_should_decrease and enabled);
 		**};
 	end decision_engine.impl;
 	
@@ -94,7 +97,7 @@ public
 	system implementation increase_speed_button.impl extends AbstractCruiseControlRegulator::change_speed_button.impl
 		--inherited from parent
 		--annex agree {**
-		--	assert increase_speed = if pressed then true else false;
+		--	assert change_speed = if pressed then true else false;
 		--**};
 	end increase_speed_button.impl;
 	
@@ -105,7 +108,7 @@ public
 	system decrease_speed_button extends AbstractCruiseControlRegulator::change_speed_button
 		--inherited from parent
 		--annex agree {**
-		--	assert change_speed = if pressed then true else false;
+		--	guarantee "speed_change only true when pressed": pressed = change_speed;
 		--**};
 	end decrease_speed_button;
 	
