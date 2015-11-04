@@ -2,7 +2,7 @@ package AdaptiveCruiseControlPlatooningSensorRegulator
 public
 	with AbstractAdaptiveCruiseControlRegulator;
 	
-	system adaptive_cruise_control_platooning_sensor extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator
+	system adaptive_controller_platooning extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_controller
 		--inherited from parent
 		--annex agree {**
 		--	assume "speed is positive or 0": current_speed >= 0;
@@ -10,13 +10,13 @@ public
 		--	guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
 		--	guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
 		--**};
-	end adaptive_cruise_control_platooning_sensor;
+	end adaptive_controller_platooning;
 	
-	system implementation adaptive_cruise_control_platooning_sensor.impl extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_cruise_control_regulator.impl
+	system implementation adaptive_controller_platooning.impl extends AbstractAdaptiveCruiseControlRegulator::abstract_adaptive_controller.impl
 		subcomponents
 			--use non-abstract implementation
 			decision_engine: refined to system decision_engine.impl;
-	end adaptive_cruise_control_platooning_sensor.impl;
+	end adaptive_controller_platooning.impl;
 	
 	----------------------------------------------------------------------------
 	

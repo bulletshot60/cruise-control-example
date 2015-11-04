@@ -2,7 +2,7 @@ package CruiseControlRegulator
 public
 	with AbstractCruiseControlRegulator;
 	
-	system cruise_control_regulator extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator
+	system basic_controller extends AbstractCruiseControlRegulator::abstract_controller
 		--inherited from parent
 		--annex agree {**
 		--	assume "speed is positive or 0": current_speed >= 0;
@@ -10,9 +10,9 @@ public
 		--	guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
 		--	guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
 		--**};
-	end cruise_control_regulator;
+	end basic_controller;
 	
-	system implementation cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
+	system implementation basic_controller.impl extends AbstractCruiseControlRegulator::abstract_controller.impl
 		subcomponents
 			--use non-abstract implementation
 			increase_speed_button: refined to system increase_speed_button.impl;
@@ -28,7 +28,7 @@ public
 			--assert increase_speed = (speed_should_increase and enabled);
 			--assert decrease_speed = (speed_should_decrease and enabled);
 		**};
-	end cruise_control_regulator.impl;
+	end basic_controller.impl;
 	
 	----------------------------------------------------------------------------
 	

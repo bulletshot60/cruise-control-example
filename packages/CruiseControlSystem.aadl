@@ -13,15 +13,15 @@ public
 			current_state: system current_power_state.impl;
 			speed_sensor: device current_speed_sensor.impl;
 			actuator: system actuator.impl;
-			controller: system AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl;
+			abstract_controller: system AbstractCruiseControlRegulator::abstract_controller.impl;
 		connections
 			on_button_to_current_state: port on_button.enable -> current_state.enable;
 			off_button_to_current_state: port off_button.disable -> current_state.disable;
 			brake_to_current_state: port brake.disable -> current_state.disable;
-			current_state_to_controller: port current_state.enabled -> controller.enabled;
-			speed_sensor_to_controller: port speed_sensor.current_speed -> controller.current_speed;
-			controller_increase_to_actuator: port controller.increase_speed -> actuator.increase_speed;
-			controller_decrease_to_actuator: port controller.decrease_speed -> actuator.decrease_speed; 
+			current_state_to_controller: port current_state.enabled -> abstract_controller.enabled;
+			speed_sensor_to_controller: port speed_sensor.current_speed -> abstract_controller.current_speed;
+			controller_increase_to_actuator: port abstract_controller.increase_speed -> actuator.increase_speed;
+			controller_decrease_to_actuator: port abstract_controller.decrease_speed -> actuator.decrease_speed; 
 	end cruise_control_system.impl;
 	
 	----------------------------------------------------------------------------

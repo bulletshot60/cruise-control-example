@@ -2,7 +2,7 @@ package AbstractAdaptiveCruiseControlRegulator
 public
 	with Base_Types, AbstractCruiseControlRegulator;
 	
-	abstract abstract_adaptive_cruise_control_regulator extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator
+	abstract abstract_adaptive_controller extends AbstractCruiseControlRegulator::abstract_controller
 		features
 			data_source_1: in data port Base_Types::Integer;
 			data_source_2: in data port Base_Types::Integer;
@@ -13,9 +13,9 @@ public
 		--	guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
 		--	guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
 		--**};
-	end abstract_adaptive_cruise_control_regulator;
+	end abstract_adaptive_controller;
 	
-	abstract implementation abstract_adaptive_cruise_control_regulator.impl extends AbstractCruiseControlRegulator::abstract_cruise_control_regulator.impl
+	abstract implementation abstract_adaptive_controller.impl extends AbstractCruiseControlRegulator::abstract_controller.impl
 		subcomponents
 			--use non-abstract implementation
 			increase_speed_button: refined to system increase_speed_button.impl;
@@ -33,7 +33,7 @@ public
 			enabled_to_decision_engine: port enabled -> decision_engine.enabled;
 			increase_speed_out: port decision_engine.increase_speed -> increase_speed;
 			decrease_speed_out: port decision_engine.decrease_speed -> decrease_speed;
-	end abstract_adaptive_cruise_control_regulator.impl;
+	end abstract_adaptive_controller.impl;
 	
 	----------------------------------------------------------------------------
 	

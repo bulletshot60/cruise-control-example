@@ -2,7 +2,7 @@ package AbstractCruiseControlRegulator
 public
 	with Base_Types;
 	
-	abstract abstract_cruise_control_regulator
+	abstract abstract_controller
 		features
 			enabled: in data port Base_Types::Boolean;
 			current_speed: in data port Base_Types::Integer;
@@ -14,9 +14,9 @@ public
 			guarantee "speed will only decrease if enabled": decrease_speed = false or (enabled = true and decrease_speed = true);
 			guarantee "decrease or increase (not both)": (decrease_speed = false and increase_speed = false) or (decrease_speed != increase_speed);
 		**};
-	end abstract_cruise_control_regulator;
+	end abstract_controller;
 	
-	abstract implementation abstract_cruise_control_regulator.impl
+	abstract implementation abstract_controller.impl
 		subcomponents
 			increase_speed_button: abstract change_speed_button.impl;
 			decrease_speed_button: abstract change_speed_button.impl;
@@ -26,7 +26,7 @@ public
 			assert increase_speed = (speed_should_increase and enabled);
 			assert decrease_speed = (speed_should_decrease and enabled);
 		**};
-	end abstract_cruise_control_regulator.impl;
+	end abstract_controller.impl;
 	
 	----------------------------------------------------------------------------
 	
